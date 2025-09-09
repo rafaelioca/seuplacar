@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copa Principal | Seu Placar Esportes</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/9zfRszqM/SEU-PLACAR-ESPORTIVO-Logo.png">
+  <!-- Google Fonts: Saira -->
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  body, html, * {
+    font-family: 'Saira', Arial, sans-serif !important;
+  }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Saira', Arial, sans-serif;
+      background: #f5f5f5;
+    }
+    .tabelas-copa-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+      align-items: flex-start;
+      margin: 0 auto 32px auto;
+      max-width: 98vw;
+    }
+    .tabelas-copa-wrap > div {
+      width: 35vw;
+      min-width: 220px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fffde7;
+      border: 2px solid #FFD600;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-size: 1.2em;
+    }
+    /* Classificação */
+    .classificacao-table th:nth-child(1), .classificacao-table td:nth-child(1) { width: 38px; min-width: 28px; max-width: 44px; }
+    .classificacao-table th:nth-child(2), .classificacao-table td:nth-child(2) { width: 44px; min-width: 32px; max-width: 54px; }
+    .classificacao-table th:nth-child(3), .classificacao-table td:nth-child(3) { width: 120px; min-width: 80px; max-width: 160px; }
+    .classificacao-table th:nth-child(4), .classificacao-table td:nth-child(4) { width: 38px; min-width: 28px; max-width: 44px; }
+    .classificacao-table th:nth-child(5), .classificacao-table td:nth-child(5) { width: 38px; min-width: 28px; max-width: 44px; }
+    /* Resultados */
+    .resultados-table th:nth-child(1), .resultados-table td:nth-child(1) { width: 140px; min-width: 80px; max-width: 180px; }
+    .resultados-table th:nth-child(2), .resultados-table td:nth-child(2) { width: 60px; min-width: 40px; max-width: 80px; }
+    .resultados-table th:nth-child(3), .resultados-table td:nth-child(3) { width: 140px; min-width: 80px; max-width: 180px; }
+    /* Próximos Jogos */
+    .proximos-table th:nth-child(1), .proximos-table td:nth-child(1) { width: 140px; min-width: 80px; max-width: 180px; }
+    .proximos-table th:nth-child(2), .proximos-table td:nth-child(2) { width: 40px; min-width: 24px; max-width: 60px; }
+    .proximos-table th:nth-child(3), .proximos-table td:nth-child(3) { width: 140px; min-width: 80px; max-width: 180px; }
+    /* Responsividade */
+    @media (max-width: 900px) {
+      .tabelas-copa-wrap > div {
+        width: 48vw;
+        min-width: 180px;
+      }
+      table {
+        font-size: 1em;
+      }
+      .logo-copa, td img {
+        height: 24px;
+        width: 24px;
+      }
+    }
+    @media (max-width: 700px) {
+      .tabelas-copa-wrap {
+        flex-direction: column;
+        gap: 18px;
+        max-width: 100vw;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        align-items: center;
+      }
+      .tabelas-copa-wrap > div {
+        width: 90vw;
+        min-width: 0;
+        max-width: 90vw;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        box-sizing: border-box;
+      }
+      table {
+        font-size: 0.95em;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .classificacao-table,
+      .resultados-table,
+      .proximos-table {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      th, td {
+        box-sizing: border-box;
+      }
+    }
+    @media (max-width: 480px) {
+      h2 {
+        font-size: 1.1em !important;
+      }
+      table {
+        font-size: 0.8em;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .classificacao-table,
+      .resultados-table,
+      .proximos-table {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .tabelas-copa-wrap {
+        max-width: 100vw;
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+        align-items: center;
+      }
+      .tabelas-copa-wrap > div {
+        width: 90vw;
+        min-width: 0;
+        max-width: 90vw;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        box-sizing: border-box;
+      }
+      th, td {
+        box-sizing: border-box;
+      }
+    }
+    @media (max-width: 370px) {
+      .resultados-table td .nome-logo-wrap {
+        display: none;
+      }
+      .resultados-table td img {
+        margin: 0;
+      }
+    }
+    .titulo-proximos-jogos {
+      display: inline-block;
+      white-space: nowrap;
+      vertical-align: middle;
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Bloco COPA dinâmico -->
+  <h2 style="width:70vw;max-width:70vw;text-align:left;font-size:2.2em;font-weight:bold;margin:16px auto 8px auto;color:#111;letter-spacing:2px;display:flex;align-items:center;gap:16px;">
+    <span id="copa-titulo" style="display:flex;align-items:center;gap:16px;"></span>
+  </h2>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;justify-content:center;align-items:flex-start;margin:0 auto 32px auto;max-width:98vw;" class="tabelas-copa-wrap">
+    <div style="width:35vw;min-width:220px;">
+      <table class="classificacao-table" style="width:100%;border-collapse:collapse;background:#fffde7;border:2px solid #FFD600;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);font-size:1.2em;">
+        <thead>
+          <tr style="background:#FFD600;color:#222;font-weight:bold;">
+            <th style="padding:12px 8px;border-bottom:2px solid #FFD600;text-align:center;">POS</th>
+            <th style="padding:12px 8px;border-bottom:2px solid #FFD600;text-align:center;"></th>
+            <th style="padding:12px 8px;border-bottom:2px solid #FFD600;">Chave</th>
+            <th style="padding:12px 8px;border-bottom:2px solid #FFD600;text-align:center;">PTS</th>
+            <th style="padding:12px 8px;border-bottom:2px solid #FFD600;text-align:center;">SG</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Conteúdo dinâmico JS -->
+        </tbody>
+      </table>
+    </div>
+    <div style="width:35vw;min-width:220px;">
+      <table class="resultados-table" style="width:100%;border-collapse:collapse;background:#fffde7;border:2px solid #FFD600;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);font-size:1.2em;">
+        <thead>
+          <tr style="background:#FFD600;color:#222;font-weight:bold;">
+            <th style="padding:10px 6px;"></th>
+            <th style="padding:10px 6px;">Resultados</th>
+            <th style="padding:10px 6px;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Conteúdo dinâmico JS -->
+        </tbody>
+      </table>
+      <table class="proximos-table" style="width:100%;border-collapse:collapse;background:#fffde7;border:2px solid #FFD600;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);font-size:1.1em;margin-top:12px;">
+        <thead>
+          <tr style="background:#FFD600;color:#222;font-weight:bold;">
+            <th colspan="3"><span class="titulo-proximos-jogos">Próximos Jogos</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Conteúdo dinâmico JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+const apiKey = 'AIzaSyCyAHN05BGmKwS75kfcFa5mgjgTy9YeZQU';
+const spreadsheetIdCopa = '196VEKYHNB1j671Z8lKsnp-YvmnYUVjl5XEN9ojygNkE';
+const abaCopa = 'GRUPO 30';
+function carregarLogoETituloCopa() {
+  const logoCell = `${encodeURIComponent(abaCopa)}!O1`;
+  const tituloCell = `${encodeURIComponent(abaCopa)}!E1`;
+  const urlLogo = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetIdCopa}/values/${logoCell}?key=${apiKey}`;
+  const urlTitulo = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetIdCopa}/values/${tituloCell}?key=${apiKey}`;
+  Promise.all([
+    fetch(urlLogo).then(r => r.json()),
+    fetch(urlTitulo).then(r => r.json())
+  ]).then(([logoData, tituloData]) => {
+    const bloco = document.getElementById('copa-titulo');
+    bloco.innerHTML = '';
+    let logoUrl = '';
+    let titulo = '';
+    if (logoData.values && logoData.values[0] && logoData.values[0][0]) {
+      logoUrl = logoData.values[0][0];
+    }
+    if (tituloData.values && tituloData.values[0] && tituloData.values[0][0]) {
+      titulo = tituloData.values[0][0];
+    }
+    if (logoUrl) {
+      const img = document.createElement('img');
+      img.src = logoUrl;
+      img.alt = 'Logo da Copa';
+      img.className = 'logo-copa';
+      img.style.height = '54px';
+      img.style.width = '54px';
+      img.style.objectFit = 'contain';
+      img.style.marginRight = '12px';
+      img.style.borderRadius = '8px';
+      img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.10)';
+      bloco.appendChild(img);
+    }
+    if (titulo) {
+      const span = document.createElement('span');
+      span.textContent = titulo;
+      span.style.fontSize = '1.1em';
+      span.style.fontWeight = 'bold';
+      span.style.color = '#111';
+      bloco.appendChild(span);
+    }
+    if (!logoUrl && !titulo) {
+      bloco.textContent = 'Copa não configurada.';
+    }
+  }).catch(() => {
+    const bloco = document.getElementById('copa-titulo');
+    bloco.textContent = 'Erro ao carregar logo/título da Copa.';
+  });
+}
+function carregarClassificacaoCopa() {
+  const tabela = document.querySelector('.tabelas-copa-wrap > div:first-child table');
+  if (!tabela) return;
+  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetIdCopa}/values/${encodeURIComponent(abaCopa)}!E4?key=${apiKey}`)
+    .then(response => response.json())
+    .then(menuData => {
+      let menuChave = 'Chave';
+      if (menuData.values && menuData.values[0] && menuData.values[0][0]) {
+        menuChave = menuData.values[0][0];
+      }
+      const ths = tabela.querySelectorAll('thead tr th');
+      if (ths && ths.length > 2) {
+        ths[2].textContent = menuChave;
+      }
+      const tbody = tabela.querySelector('tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetIdCopa}/values/${encodeURIComponent(abaCopa)}!E5:O8?key=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.values && Array.isArray(data.values)) {
+            data.values.forEach((linha, idx) => {
+              let emblema = linha[10] || '';
+              const equipe = linha[0] || '';
+              const pts = linha[1] || '';
+              const sg = linha[6] || '';
+              const pos = (idx+1) + 'º';
+              // Apenas 1º e 2º com cor verde água
+              const corPos = idx < 2 ? '#00e6c0' : '#fff';
+              const corFundo = idx % 2 === 0 ? '#111' : '#222';
+              tbody.insertAdjacentHTML('beforeend',
+                `<tr style="background:${corFundo};color:#fff;">
+                  <td style="padding:10px 8px;text-align:center;color:${corPos};">${pos}</td>
+                  <td style="text-align:center;">
+                    ${emblema ? `<img src='${emblema}' alt='' style='height:32px;width:32px;object-fit:contain;border-radius:6px;'>` : ''}
+                  </td>
+                  <td>${equipe}</td>
+                  <td style="text-align:center;">${pts}</td>
+                  <td style="text-align:center;">${sg}</td>
+                </tr>`
+              );
+            });
+          } else {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#c00;font-weight:bold;">Nenhuma equipe encontrada.</td></tr>';
+          }
+        })
+        .catch(() => {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#c00;font-weight:bold;">Erro ao carregar classificação.</td></tr>';
+        });
+    })
+    .catch(() => {
+      const ths = tabela.querySelectorAll('thead tr th');
+      if (ths && ths.length > 2) {
+        ths[2].textContent = 'Chave';
+      }
+    });
+}
+function carregarResultadosCopa() {
+  const tabelaResultados = document.querySelector('.tabelas-copa-wrap > div:nth-child(2) table:nth-child(1) tbody');
+  if (!tabelaResultados) return;
+  tabelaResultados.innerHTML = '';
+  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetIdCopa}/values/${encodeURIComponent(abaCopa)}!X18:AC19?key=${apiKey}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.values && Array.isArray(data.values)) {
+        data.values.forEach((linha) => {
+          let emblema1 = linha[0] ? linha[0].trim().replace(/^"|"$/g, '') : '';
+          let nome1 = linha[1] || '';
+          let res1 = linha[2] || '';
+          let res2 = linha[3] || '';
+          let nome2 = linha[4] || '';
+          let emblema2 = linha[5] ? linha[5].trim().replace(/^"|"$/g, '') : '';
+          tabelaResultados.insertAdjacentHTML('beforeend',
+            `<tr style='background:#111;color:#fff;'>
+              <td style='text-align:left;height:40px;padding-left:10px;'>
+                <span class='nome-logo-wrap'>${emblema1 ? `<img src='${emblema1}' alt='' style='height:28px;width:28px;vertical-align:middle;margin-right:8px;'>` : ''}${nome1}</span>
+              </td>
+              <td style='text-align:center;height:40px;'>${res1} : ${res2}</td>
+              <td style='text-align:right;height:40px;padding-right:10px;'>
+                <span class='nome-logo-wrap'>${nome2}${emblema2 ? `<img src='${emblema2}' alt='' style='height:28px;width:28px;vertical-align:middle;margin-left:8px;'>` : ''}</span>
+              </td>
+            </tr>`
+          );
+        });
+      } else {
+        tabelaResultados.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#c00;font-weight:bold;'>Nenhum resultado encontrado.</td></tr>";
+      }
+    })
+    .catch(() => {
+      tabelaResultados.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#c00;font-weight:bold;'>Erro ao carregar resultados.</td></tr>";
+    });
+}
+function carregarProximosJogosCopa() {
+  const tabelaProximos = document.querySelector('.tabelas-copa-wrap > div:nth-child(2) table:nth-child(2) tbody');
+  if (!tabelaProximos) return;
+  tabelaProximos.innerHTML = '';
+  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetIdCopa}/values/${encodeURIComponent(abaCopa)}!X11:AC12?key=${apiKey}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.values && Array.isArray(data.values)) {
+        data.values.forEach((linha) => {
+          let emblema1 = linha[0] ? linha[0].trim().replace(/^"|"$/g, '') : '';
+          let nome1 = linha[1] || '';
+          let nome2 = linha[4] || '';
+          let emblema2 = linha[5] ? linha[5].trim().replace(/^"|"$/g, '') : '';
+          tabelaProximos.insertAdjacentHTML('beforeend',
+            `<tr style='background:#111;color:#fff;'>
+              <td style='text-align:left;height:40px;padding-left:10px;'>
+                <span class='nome-logo-wrap'>${emblema1 ? `<img src='${emblema1}' alt='' style='height:28px;width:28px;vertical-align:middle;margin-right:8px;'>` : ''}${nome1}</span>
+              </td>
+              <td style='text-align:center;height:40px;'>:</td>
+              <td style='text-align:right;height:40px;padding-right:10px;'>
+                <span class='nome-logo-wrap'>${nome2}${emblema2 ? `<img src='${emblema2}' alt='' style='height:28px;width:28px;vertical-align:middle;margin-left:8px;'>` : ''}</span>
+              </td>
+            </tr>`
+          );
+        });
+      } else {
+        tabelaProximos.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#c00;font-weight:bold;'>Nenhum jogo encontrado.</td></tr>";
+      }
+    })
+    .catch(() => {
+      tabelaProximos.innerHTML = "<tr><td colspan='3' style='text-align:center;color:#c00;font-weight:bold;'>Erro ao carregar próximos jogos.</td></tr>";
+    });
+}
+carregarLogoETituloCopa();
+carregarClassificacaoCopa();
+carregarResultadosCopa();
+carregarProximosJogosCopa();
+</script>
+</body>
+</html>
