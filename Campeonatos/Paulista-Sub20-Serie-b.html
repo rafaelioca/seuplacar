@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Paulista Sub-20 Série B | Seu Placar Esportes</title>
+	<link rel="stylesheet" href="../style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;700;900&display=swap" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<!-- Firebase SDKs -->
+	<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<script>
+	// Configuração do seu projeto Firebase
+	const firebaseConfig = {
+		apiKey: "AIzaSyDLX5WDAWzRg-iRvZ4w1vfiWhGr4oIJqyk",
+		authDomain: "tabelas-seuplacar.firebaseapp.com",
+		projectId: "tabelas-seuplacar",
+		storageBucket: "tabelas-seuplacar.appspot.com",
+		messagingSenderId: "",
+		appId: ""
+	};
+	// Inicializa Firebase
+	firebase.initializeApp(firebaseConfig);
+	const db = firebase.firestore();
+
+	// Função para buscar logo e nome do campeonato
+	function carregarDadosCampeonato() {
+		db.collection("paulista-sub20-serieb").doc("DadosCampeonato").get().then((doc) => {
+			if (doc.exists) {
+				const dados = doc.data();
+				document.getElementById('logo-campeonato').src = dados.Logo || "";
+				document.querySelector('h2[style*="font-size: 2rem"]').textContent = dados.Nome || "Paulista Sub-20 Série B";
+			}
+		});
+	}
+
+	// Função para buscar dados da coleção e exibir na tabela
+	function carregarTabela() {
+		// Aqui você pode montar a tabela real dos dados do campeonato
+		// Exemplo: buscar os times, grupos, etc. e montar a tabela conforme sua estrutura
+		document.getElementById('tabela-campeonato').innerHTML = '';
+		// TODO: implementar exibição dos dados reais
+	}
+
+	window.onload = function() {
+		carregarDadosCampeonato();
+		carregarTabela();
+	};
+</script>
+
+<body>
+			<header class="header">
+			<div class="header-content">
+				<div class="logo">
+					<img src="../img/Logo 2.png" alt="Seu Placar" class="logo-img">
+				</div>
+				<nav class="menu">
+					<a href="../index.html" class="menu-link">Home</a>
+					<div class="menu-campeonatos">
+						<a href="#" class="menu-link">Campeonatos</a>
+						<ul class="submenu-campeonatos">
+							<!-- Submenu dinâmico via JS/Firebase -->
+						</ul>
+					</div>
+					<a href="../noticias.html" class="menu-link">Notícias</a>
+				</nav>
+				<button class="menu-toggle" aria-label="Abrir menu">
+					<span class="hamburger"></span>
+					<span class="hamburger"></span>
+					<span class="hamburger"></span>
+				</button>
+			</div>
+		</header>
+		<div class="publicidade1" id="publicidade1">
+			<img src="../img/publicidade1.png" alt="Publicidade 1" style="width:100%;max-width:1200px;display:block;margin:0 auto;">
+		</div>
+			<main style="padding: 24px;">
+				<div style="display: flex; align-items: center; gap: 24px; margin-bottom: 24px;">
+					<img id="logo-campeonato" src="" alt="Logo Campeonato" style="height: 64px; width: 64px; object-fit: contain; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+					<h2 style="font-size: 2rem; font-weight: 900; color: #000; margin: 0;">Paulista Sub-20 Série B</h2>
+				</div>
+				<!-- Menu de fases -->
+<div id="menu-fases" style="display:flex;gap:16px;align-items:center;justify-content:center;margin-bottom:24px;">
+  <button id="btn-fase-grupos" class="fase-ativa" style="padding:8px 18px;border-radius:8px;border:none;background:#eee;color:#000000;font-weight:700;cursor:pointer;">Fase de Grupos</button>
+  <button id="btn-segunda-fase" style="padding:8px 18px;border-radius:8px;border:none;background:#eee;color:#222;font-weight:700;cursor:pointer;">Segunda Fase</button>
+</div>
+					<section id="bloco-fase-grupos">
+						<h2 class="titulo-fase">Fase de Grupos</h2>
+						<div class="grupos-container" style="display: flex; flex-direction: column; gap: 32px;">
+			<!-- Grupo 1 e Jogos da Rodada 1 lado a lado -->
+			<script>
+			// Exibe os jogos da rodada 1 do grupo 1
+	// Navegação de rodadas e exibição dos jogos do Grupo 1
+
+		async function carregarJogosGrupo1() {
+			const db = firebase.firestore();
+			const jogosDiv = document.getElementById('jogos-rodada-grupo1');
+			const tituloRodada = document.getElementById('titulo-rodada');
+			tituloRodada.textContent = 'Rodada ' + rodadaAtual;
+			jogosDiv.innerHTML = '<span style="color:#888">Carregando...</span>';
+			try {
+				const rodadaDoc = await db.collection('paulista-sub20-serieb').doc('rodada' + rodadaAtual).get();
+				if (!rodadaDoc.exists) {
+					jogosDiv.innerHTML = '<span style="color:#b71c1c">Rodada não encontrada.</span>';
+					return;
+				}
+				console.log('Dados da rodada:', rodadaDoc.data()); // <-- LOG PARA DEBUG
+				const grupos = rodadaDoc.data().grupos;
+				const jogos = grupos && grupos.grupo1 ? grupos.grupo1 : [];
+				if (!jogos.length) {
+					jogosDiv.innerHTML = '<span style="color:#b71c1c">Nenhum jogo cadastrado para esta rodada.</span>';
+					return;
+				}
+				jogosDiv.innerHTML = '';
+				jogos.forEach(jogo => {
+					const el = document.createElement('div');
+					el.className = 'jogo-item';
+					el.style.marginBottom = '16px';
+					el.style.background = '#fff';
+					el.style.borderRadius = '10px';
+					el.style.padding = '12px 18px';
+					el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)';
+					const placarA = (jogo.placarA !== undefined && jogo.placarA !== null && jogo.placarA !== '') ? jogo.placarA : '-';
+					const placarB = (jogo.placarB !== undefined && jogo.placarB !== null && jogo.placarB !== '') ? jogo.placarB : '-';
+					el.innerHTML =
+						"<div style='display:flex;align-items:center;justify-content:center;gap:18px;'>" +
+						"<img src='" + (jogo.logoA || '') + "' alt='Logo A' style='height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;'>" +
+						"<span class='nome-clube' style='font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;'>" + (jogo.timeA || '') + "</span>" +
+						"<span style='font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;'>" + placarA + " <span style='color:#FFD600'>x</span> " + placarB + "</span>" +
+						"<span class='nome-clube' style='font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;'>" + (jogo.timeB || '') + "</span>" +
+						"<img src='" + (jogo.logoB || '') + "' alt='Logo B' style='height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;'>" +
+						"</div>";
+					jogosDiv.appendChild(el);
+				});
+			} catch (e) {
+				jogosDiv.innerHTML = '<span style="color:#b71c1c">Erro ao carregar jogos.</span>';
+				console.error('Erro ao carregar jogos:', e); // <-- LOG DE ERRO
+			}
+		}
+
+		function atualizarSetas() {
+			const btnAnt = document.getElementById('rodada-anterior');
+			const btnProx = document.getElementById('rodada-proxima');
+			btnAnt.disabled = rodadaAtual === 1;
+			btnAnt.style.opacity = rodadaAtual === 1 ? '0.5' : '1';
+			btnProx.disabled = rodadaAtual === totalRodadas;
+			btnProx.style.opacity = rodadaAtual === totalRodadas ? '0.5' : '1';
+		}
+
+		document.getElementById('rodada-anterior').onclick = function() {
+			if (rodadaAtual > 1) {
+				rodadaAtual--;
+				carregarJogosGrupo1();
+				atualizarSetas();
+			}
+		};
+		document.getElementById('rodada-proxima').onclick = function() {
+			if (rodadaAtual < totalRodadas) {
+				rodadaAtual++;
+				carregarJogosGrupo1();
+				atualizarSetas();
+			}
+		};
+
+		window.addEventListener('DOMContentLoaded', () => {
+			carregarJogosGrupo1();
+			atualizarSetas();
+		});
+			</script>
+							<!-- Grupo 1 e Jogos da Rodada 1 lado a lado -->
+							<div style="display: flex; gap: 32px; align-items: flex-start;">
+								<div class="grupo-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; max-width: 560px; width: 100%;">
+									<h3 style="color: #000; font-weight: 900; margin-top: 0;">Grupo 1</h3>
+									<div class="tabela-times" id="tabela-grupo-1"></div>
+								</div>
+								<div class="jogos-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(26,35,126,0.08); padding: 24px; max-width: 560px; width: 100%;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <button id="rodada-anterior" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8592;</button>
+        <span id="titulo-rodada" style="font-size: 1.2rem; font-weight: 900; color: #000;">Rodada 1</span>
+        <button id="rodada-proxima" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8594;</button>
+    </div>
+    <div class="lista-jogos" id="jogos-rodada-grupo1"></div>
+</div>
+							</div>
+
+							<!-- Adiciona blocos de jogos para os grupos 2, 3, 4 e 5 -->
+<div style="display: flex; gap: 32px; align-items: flex-start; margin-top: 32px;">
+    <div class="grupo-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; min-width: 340px; flex: 1;">
+        <h3 style="color: #000; font-weight: 900; margin-top: 0;">Grupo 2</h3>
+        <div class="tabela-times" id="tabela-grupo-2"></div>
+    </div>
+    <div class="jogos-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(26,35,126,0.08); padding: 24px; min-width: 340px; flex: 1;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <button id="rodada-anterior-grupo2" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8592;</button>
+            <span id="titulo-rodada-grupo2" style="font-size: 1.2rem; font-weight: 900; color: #000;">Rodada 1</span>
+            <button id="rodada-proxima-grupo2" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8594;</button>
+        </div>
+        <div class="lista-jogos" id="jogos-rodada-grupo2"></div>
+    </div>
+</div>
+<div style="display: flex; gap: 32px; align-items: flex-start; margin-top: 32px;">
+    <div class="grupo-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; min-width: 340px; flex: 1;">
+        <h3 style="color: #000; font-weight: 900; margin-top: 0;">Grupo 3</h3>
+        <div class="tabela-times" id="tabela-grupo-3"></div>
+    </div>
+    <div class="jogos-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(26,35,126,0.08); padding: 24px; min-width: 340px; flex: 1;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <button id="rodada-anterior-grupo3" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8592;</button>
+            <span id="titulo-rodada-grupo3" style="font-size: 1.2rem; font-weight: 900; color: #000;">Rodada 1</span>
+            <button id="rodada-proxima-grupo3" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8594;</button>
+        </div>
+        <div class="lista-jogos" id="jogos-rodada-grupo3"></div>
+    </div>
+</div>
+<div style="display: flex; gap: 32px; align-items: flex-start; margin-top: 32px;">
+    <div class="grupo-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; min-width: 340px; flex: 1;">
+        <h3 style="color: #000; font-weight: 900; margin-top: 0;">Grupo 4</h3>
+        <div class="tabela-times" id="tabela-grupo-4"></div>
+    </div>
+    <div class="jogos-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(26,35,126,0.08); padding: 24px; min-width: 340px; flex: 1;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <button id="rodada-anterior-grupo4" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8592;</button>
+            <span id="titulo-rodada-grupo4" style="font-size: 1.2rem; font-weight: 900; color: #000;">Rodada 1</span>
+            <button id="rodada-proxima-grupo4" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8594;</button>
+        </div>
+        <div class="lista-jogos" id="jogos-rodada-grupo4"></div>
+    </div>
+</div>
+<div style="display: flex; gap: 32px; align-items: flex-start; margin-top: 32px;">
+    <div class="grupo-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; min-width: 340px; flex: 1;">
+        <h3 style="color: #000; font-weight: 900; margin-top: 0;">Grupo 5</h3>
+        <div class="tabela-times" id="tabela-grupo-5"></div>
+    </div>
+    <div class="jogos-bloco" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(26,35,126,0.08); padding: 24px; min-width: 340px; flex: 1;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <button id="rodada-anterior-grupo5" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8592;</button>
+            <span id="titulo-rodada-grupo5" style="font-size: 1.2rem; font-weight: 900; color: #000;">Rodada 1</span>
+            <button id="rodada-proxima-grupo5" style="background: #000; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-weight: bold; font-size: 1.1rem; cursor: pointer;">&#8594;</button>
+        </div>
+        <div class="lista-jogos" id="jogos-rodada-grupo5"></div>
+    </div>
+</div>
+						</div>
+					</section>
+					<section id="bloco-segunda-fase" style="display:none;">
+  <h2 style="text-align:center;color:#000000;margin-bottom:18px;">Jogos da Segunda Fase</h2>
+  <div class="etapa-fase" style="margin-bottom:32px;">
+    <h3 style="text-align:center;color:#222;margin-bottom:16px;">Oitavas de Final</h3>
+    <div class="blocos-jogos-fase" style="display:flex;gap:32px;justify-content:center;">
+      <div class="bloco-jogos-ida" style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:24px;max-width:540px;width:100%;">
+        <h4 style="color:#000000;text-align:center;margin-bottom:12px;">Jogos de Ida</h4>
+        <div class="lista-jogos-ida oitavas"></div>
+      </div>
+      <div class="bloco-jogos-volta" style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:24px;max-width:540px;width:100%;">
+        <h4 style="color:#000000;text-align:center;margin-bottom:12px;">Jogos de Volta</h4>
+        <div class="lista-jogos-volta oitavas"></div>
+      </div>
+    </div>
+  </div>
+  <div class="etapa-fase" style="margin-bottom:32px;">
+    <h3 style="text-align:center;color:#222;margin-bottom:16px;">Quartas de Final</h3>
+    <div class="blocos-jogos-fase" style="display:flex;gap:32px;justify-content:center;">
+      <div class="bloco-jogos-ida" style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:24px;max-width:540px;width:100%;">
+        <h4 style="color:#000000;text-align:center;margin-bottom:12px;">Jogos de Ida</h4>
+        <div class="lista-jogos-ida quartas"></div>
+      </div>
+      <div class="bloco-jogos-volta" style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:24px;max-width:540px;width:100%;">
+        <h4 style="color:#000000;text-align:center;margin-bottom:12px;">Jogos de Volta</h4>
+        <div class="lista-jogos-volta quartas"></div>
+      </div>
+    </div>
+  </div>
+  <div class="etapa-fase" style="margin-bottom:32px;">
+    <h3 style="text-align:center;color:#222;margin-bottom:16px;">Semi-final</h3>
+    <div class="blocos-jogos-fase" style="display:flex;gap:32px;justify-content:center;">
+      <div class="bloco-jogos-ida" style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:24px;max-width:540px;width:100%;">
+        <h4 style="color:#000000;text-align:center;margin-bottom:12px;">Jogos de Ida</h4>
+        <div class="lista-jogos-ida semi"></div>
+      </div>
+      <div class="bloco-jogos-volta" style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:24px;max-width:540px;width:100%;">
+        <h4 style="color:#000000;text-align:center;margin-bottom:12px;">Jogos de Volta</h4>
+        <div class="lista-jogos-volta semi"></div>
+      </div>
+    </div>
+  </div>
+  <div class="etapa-fase" style="margin-bottom:32px;">
+    <h3 style="text-align:center;color:#222;margin-bottom:16px;">Final</h3>
+    <div class="blocos-jogos-fase" style="display:flex;gap:32px;justify-content:center;">
+      <div class="bloco-jogos-ida" style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:24px;max-width:540px;width:100%;">
+        <h4 style="color:#000000;text-align:center;margin-bottom:12px;">Jogo de Ida</h4>
+        <div class="lista-jogos-ida final"></div>
+      </div>
+      <div class="bloco-jogos-volta" style="background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:24px;max-width:540px;width:100%;">
+        <h4 style="color:#000000;text-align:center;margin-bottom:12px;">Jogo de Volta</h4>
+        <div class="lista-jogos-volta final"></div>
+      </div>
+    </div>
+  </div>
+</section>
+			<script>
+		// Inicialização do Firebase (já deve estar no topo do arquivo)
+		// ...existing code...
+
+			// Função para buscar e exibir dados do Grupo A
+				async function carregarGrupo(grupoNum) {
+					const db = firebase.firestore();
+					const timesDiv = document.getElementById(`tabela-grupo-${grupoNum}`);
+					timesDiv.innerHTML = '';
+					// Buscar os times da subcoleção correta
+					const timesSnapshot = await db.collection('paulista-sub20-serieb').doc(`grupo${grupoNum}`).collection('times').get();
+					if (timesSnapshot.empty) {
+						timesDiv.innerHTML = `<span style='color:#b71c1c'>Nenhum time cadastrado para o Grupo ${grupoNum}.</span>`;
+						return;
+					}
+					// Coletar e ordenar os times pelo campo POS, ignorando o documento POS
+					const timesArray = [];
+					timesSnapshot.forEach(doc => {
+						if (doc.id !== 'POS') {
+							const time = doc.data();
+							timesArray.push(time);
+						}
+					});
+					timesArray.sort((a, b) => Number(a.POS) - Number(b.POS));
+					// Montar tabela dos times
+					const tabela = document.createElement('table');
+					tabela.className = 'tabela-times';
+					tabela.style.borderCollapse = 'collapse';
+					tabela.style.borderSpacing = '0px';
+									tabela.innerHTML = `<tr style='background:#111;'>
+										<th style='text-align:center;width:50px;color:#FFD600;'>Pos</th>
+										<th style='color:#FFD600;'></th>
+										<th style='width:200px;color:#FFD600;'>Equipe</th>
+										<th style='text-align:center;width:50px;color:#FFD600;'>PTS</th>
+										<th style='text-align:center;width:50px;color:#FFD600;'>VIT</th>
+										<th style='text-align:center;width:50px;color:#FFD600;'>EMP</th>
+										<th style='text-align:center;width:50px;color:#FFD600;'>DER</th>
+										<th style='text-align:center;width:50px;color:#FFD600;'>SG</th>
+										<th style='text-align:center;width:50px;color:#FFD600;'>GF</th>
+										<th style='text-align:center;width:50px;color:#FFD600;'>GS</th>
+									</tr>`;
+							timesArray.forEach((time, idx) => {
+								const corFundo = idx % 2 === 0 ? '#e0e0e0' : '#bdbdbd';
+								const linha = document.createElement('tr');
+												linha.style.background = corFundo;
+												linha.innerHTML = `
+													<td style='text-align:center;width:50px;'>${time.POS ?? ''}</td>
+													<td><img src="${time.Logo ?? ''}" alt="Logo" style="height:32px;width:32px;object-fit:contain;"></td>
+													<td style='width:200px;'>${time.Equipe ?? ''}</td>
+													<td style='text-align:center;width:50px;'>${time.PTS ?? ''}</td>
+													<td style='text-align:center;width:50px;'>${time.VIT ?? ''}</td>
+													<td style='text-align:center;width:50px;'>${time.EMP ?? ''}</td>
+													<td style='text-align:center;width:50px;'>${time.DER ?? ''}</td>
+													<td style='text-align:center;width:50px;'>${time.SG ?? ''}</td>
+													<td style='text-align:center;width:50px;'>${time.GF ?? ''}</td>
+													<td style='text-align:center;width:50px;'>${time.GS ?? ''}</td>
+												`;
+								tabela.appendChild(linha);
+							});
+					timesDiv.appendChild(tabela);
+				}
+
+			// Chamar ao carregar a página
+			window.addEventListener('DOMContentLoaded', () => {
+				for (let i = 1; i <= 5; i++) {
+					carregarGrupo(i);
+				}
+			});
+		</script>
+			</main>
+
+<!-- MOVER O SCRIPT PARA O FINAL DO BODY -->
+<script>
+    let rodadaAtual = 1;
+    const totalRodadas = 10;
+    let rodadaGrupo = { 2: 1, 3: 1, 4: 1, 5: 1 };
+
+    async function carregarJogosGrupo1() {
+        const db = firebase.firestore();
+        const jogosDiv = document.getElementById('jogos-rodada-grupo1');
+        const tituloRodada = document.getElementById('titulo-rodada');
+        tituloRodada.textContent = 'Rodada ' + rodadaAtual;
+        jogosDiv.innerHTML = '<span style="color:#888">Carregando...</span>';
+        try {
+            const rodadaDoc = await db.collection('paulista-sub20-serieb').doc('rodada' + rodadaAtual).get();
+            if (!rodadaDoc.exists) {
+                jogosDiv.innerHTML = '<span style="color:#b71c1c">Rodada não encontrada.</span>';
+                return;
+            }
+            console.log('Dados da rodada:', rodadaDoc.data());
+            const grupos = rodadaDoc.data().grupos;
+            const jogos = grupos && grupos.grupo1 ? grupos.grupo1 : [];
+            if (!jogos.length) {
+                jogosDiv.innerHTML = '<span style="color:#b71c1c">Nenhum jogo cadastrado para esta rodada.</span>';
+                return;
+            }
+            jogosDiv.innerHTML = '';
+            jogos.forEach(jogo => {
+                const el = document.createElement('div');
+                el.className = 'jogo-item';
+                el.style.marginBottom = '16px';
+                el.style.background = '#fff';
+                el.style.borderRadius = '10px';
+                el.style.padding = '12px 18px';
+                el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)';
+                const placarA = (jogo.placarA !== undefined && jogo.placarA !== null && jogo.placarA !== '') ? jogo.placarA : '-';
+                const placarB = (jogo.placarB !== undefined && jogo.placarB !== null && jogo.placarB !== '') ? jogo.placarB : '-';
+                el.innerHTML =
+                    "<div style='display:flex;align-items:center;justify-content:center;gap:18px;'>" +
+                    "<img src='" + (jogo.logoA || '') + "' alt='Logo A' style='height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;'>" +
+                    "<span class='nome-clube' style='font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;'>" + (jogo.timeA || '') + "</span>" +
+                    "<span style='font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;'>" + placarA + " <span style='color:#FFD600'>x</span> " + placarB + "</span>" +
+                    "<span class='nome-clube' style='font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;'>" + (jogo.timeB || '') + "</span>" +
+                    "<img src='" + (jogo.logoB || '') + "' alt='Logo B' style='height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;'>" +
+                    "</div>";
+                jogosDiv.appendChild(el);
+            });
+        } catch (e) {
+            jogosDiv.innerHTML = '<span style="color:#b71c1c">Erro ao carregar jogos.</span>';
+            console.error('Erro ao carregar jogos:', e);
+        }
+    }
+
+    function atualizarSetas() {
+        const btnAnt = document.getElementById('rodada-anterior');
+        const btnProx = document.getElementById('rodada-proxima');
+        btnAnt.disabled = rodadaAtual === 1;
+        btnAnt.style.opacity = rodadaAtual === 1 ? '0.5' : '1';
+        btnProx.disabled = rodadaAtual === totalRodadas;
+        btnProx.style.opacity = rodadaAtual === totalRodadas ? '0.5' : '1';
+    }
+
+    document.getElementById('rodada-anterior').onclick = function() {
+        if (rodadaAtual > 1) {
+            rodadaAtual--;
+            carregarJogosGrupo1();
+            atualizarSetas();
+        }
+    };
+    document.getElementById('rodada-proxima').onclick = function() {
+        if (rodadaAtual < totalRodadas) {
+            rodadaAtual++;
+            carregarJogosGrupo1();
+            atualizarSetas();
+        }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+        carregarJogosGrupo1();
+        atualizarSetas();
+    });
+
+		// Funções para carregar jogos dos grupos 2, 3, 4 e 5
+function carregarJogosGrupo(numGrupo) {
+    const db = firebase.firestore();
+    const jogosDiv = document.getElementById('jogos-rodada-grupo' + numGrupo);
+    const tituloRodada = document.getElementById('titulo-rodada-grupo' + numGrupo);
+    tituloRodada.textContent = 'Rodada ' + rodadaGrupo[numGrupo];
+    jogosDiv.innerHTML = '<span style="color:#888">Carregando...</span>';
+    db.collection('paulista-sub20-serieb').doc('rodada' + rodadaGrupo[numGrupo]).get().then(rodadaDoc => {
+        if (!rodadaDoc.exists) {
+            jogosDiv.innerHTML = '<span style="color:#b71c1c">Rodada não encontrada.</span>';
+            return;
+        }
+        const grupos = rodadaDoc.data().grupos;
+        const jogos = grupos && grupos['grupo' + numGrupo] ? grupos['grupo' + numGrupo] : [];
+        if (!jogos.length) {
+            jogosDiv.innerHTML = '<span style="color:#b71c1c">Nenhum jogo cadastrado para esta rodada.</span>';
+            return;
+        }
+        jogosDiv.innerHTML = '';
+        jogos.forEach(jogo => {
+            const el = document.createElement('div');
+            el.className = 'jogo-item';
+            el.style.marginBottom = '16px';
+            el.style.background = '#fff';
+            el.style.borderRadius = '10px';
+            el.style.padding = '12px 18px';
+            el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)';
+            const placarA = (jogo.placarA !== undefined && jogo.placarA !== null && jogo.placarA !== '') ? jogo.placarA : '-';
+            const placarB = (jogo.placarB !== undefined && jogo.placarB !== null && jogo.placarB !== '') ? jogo.placarB : '-';
+            el.innerHTML =
+                "<div style='display:flex;align-items:center;justify-content:center;gap:18px;'>" +
+                "<img src='" + (jogo.logoA || '') + "' alt='Logo A' style='height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;'>" +
+                "<span class='nome-clube' style='font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;'>" + (jogo.timeA || '') + "</span>" +
+                "<span style='font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;'>" + placarA + " <span style='color:#FFD600'>x</span> " + placarB + "</span>" +
+                "<span class='nome-clube' style='font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;'>" + (jogo.timeB || '') + "</span>" +
+                "<img src='" + (jogo.logoB || '') + "' alt='Logo B' style='height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;'>" +
+                "</div>";
+            jogosDiv.appendChild(el);
+        });
+    });
+}
+// Eventos de navegação para cada grupo
+for (let i = 2; i <= 5; i++) {
+    document.getElementById('rodada-anterior-grupo' + i).onclick = function() {
+        if (rodadaGrupo[i] > 1) {
+            rodadaGrupo[i]--;
+            carregarJogosGrupo(i);
+        }
+    };
+    document.getElementById('rodada-proxima-grupo' + i).onclick = function() {
+        if (rodadaGrupo[i] < totalRodadas) {
+            rodadaGrupo[i]++;
+            carregarJogosGrupo(i);
+        }
+    };
+}
+// Chamar ao carregar a página
+window.addEventListener('DOMContentLoaded', () => {
+    carregarJogosGrupo1();
+    atualizarSetas();
+    for (let i = 2; i <= 5; i++) {
+        carregarJogosGrupo(i);
+    }
+});
+
+// Alternância de fases
+const btnFaseGrupos = document.getElementById('btn-fase-grupos');
+const btnSegundaFase = document.getElementById('btn-segunda-fase');
+const blocoFaseGrupos = document.getElementById('bloco-fase-grupos');
+const blocoSegundaFase = document.getElementById('bloco-segunda-fase');
+btnFaseGrupos.addEventListener('click', function() {
+  btnFaseGrupos.classList.add('fase-ativa');
+  btnSegundaFase.classList.remove('fase-ativa');
+  blocoFaseGrupos.style.display = '';
+  blocoSegundaFase.style.display = 'none';
+});
+btnSegundaFase.addEventListener('click', function() {
+  btnSegundaFase.classList.add('fase-ativa');
+  btnFaseGrupos.classList.remove('fase-ativa');
+  blocoFaseGrupos.style.display = 'none';
+  blocoSegundaFase.style.display = '';
+  exibirOitavas();
+  exibirQuartasSemiFinal();
+});
+function exibirOitavas() {
+  const db = firebase.firestore();
+  db.collection('paulista-sub20-serieb').doc('oitavas').get().then(doc => {
+    if (!doc.exists) return;
+    const dados = doc.data();
+    const jogosIda = dados.jogosIda || [];
+    const jogosVolta = dados.jogosVolta || [];
+    const listaIda = document.querySelector('.lista-jogos-ida.oitavas');
+    const listaVolta = document.querySelector('.lista-jogos-volta.oitavas');
+    listaIda.innerHTML = '';
+    listaVolta.innerHTML = '';
+    jogosIda.forEach(jogo => {
+      listaIda.innerHTML += `
+        <div class="jogo-item" style="margin-bottom:16px;display:flex;align-items:center;gap:18px;background:#fff;border-radius:10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+          <img src="${jogo.logoTime1}" alt="Logo A" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;">${jogo.nomeTime1}</span>
+          <span style="font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;">${jogo.resultadoTime1} <span style="color:#FFD600">x</span> ${jogo.resultadoTime2}</span>
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;">${jogo.nomeTime2}</span>
+          <img src="${jogo.logoTime2}" alt="Logo B" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+        </div>
+      `;
+    });
+    jogosVolta.forEach(jogo => {
+      listaVolta.innerHTML += `
+        <div class="jogo-item" style="margin-bottom:16px;display:flex;align-items:center;gap:18px;background:#fff;border-radius:10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+          <img src="${jogo.logoTime1}" alt="Logo A" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;">${jogo.nomeTime1}</span>
+          <span style="font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;">${jogo.resultadoTime1} <span style="color:#FFD600">x</span> ${jogo.resultadoTime2}</span>
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;">${jogo.nomeTime2}</span>
+          <img src="${jogo.logoTime2}" alt="Logo B" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+        </div>
+      `;
+    });
+  });
+}
+function exibirQuartasSemiFinal() {
+  const db = firebase.firestore();
+  // Quartas de Final
+  db.collection('paulista-sub20-serieb').doc('quartas').get().then(doc => {
+    if (!doc.exists) return;
+    const dados = doc.data();
+    const jogosIda = dados.jogosIda || [];
+    const jogosVolta = dados.jogosVolta || [];
+    const listaIda = document.querySelector('.lista-jogos-ida.quartas');
+    const listaVolta = document.querySelector('.lista-jogos-volta.quartas');
+    listaIda.innerHTML = '';
+    listaVolta.innerHTML = '';
+    jogosIda.forEach(jogo => {
+      listaIda.innerHTML += `
+        <div class="jogo-item" style="margin-bottom:16px;display:flex;align-items:center;gap:18px;background:#fff;border-radius:10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+          <img src="${jogo.logoTime1}" alt="Logo A" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;">${jogo.nomeTime1}</span>
+          <span style="font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;">${jogo.resultadoTime1} <span style="color:#FFD600">x</span> ${jogo.resultadoTime2}</span>
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;">${jogo.nomeTime2}</span>
+          <img src="${jogo.logoTime2}" alt="Logo B" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+        </div>
+      `;
+    });
+    jogosVolta.forEach(jogo => {
+      listaVolta.innerHTML += `
+        <div class="jogo-item" style="margin-bottom:16px;display:flex;align-items:center;gap:18px;background:#fff;border-radius:10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+          <img src="${jogo.logoTime1}" alt="Logo A" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;">${jogo.nomeTime1}</span>
+          <span style="font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;">${jogo.resultadoTime1} <span style="color:#FFD600">x</span> ${jogo.resultadoTime2}</span>
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;">${jogo.nomeTime2}</span>
+          <img src="${jogo.logoTime2}" alt="Logo B" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+        </div>
+      `;
+    });
+  });
+  // Semi-final
+  db.collection('paulista-sub20-serieb').doc('semi').get().then(doc => {
+    if (!doc.exists) return;
+    const dados = doc.data();
+    const jogosIda = dados.jogosIda || [];
+    const jogosVolta = dados.jogosVolta || [];
+    const listaIda = document.querySelector('.lista-jogos-ida.semi');
+    const listaVolta = document.querySelector('.lista-jogos-volta.semi');
+    listaIda.innerHTML = '';
+    listaVolta.innerHTML = '';
+    jogosIda.forEach(jogo => {
+      listaIda.innerHTML += `
+        <div class="jogo-item" style="margin-bottom:16px;display:flex;align-items:center;gap:18px;background:#fff;border-radius:10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+          <img src="${jogo.logoTime1}" alt="Logo A" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;">${jogo.nomeTime1}</span>
+          <span style="font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;">${jogo.resultadoTime1} <span style="color:#FFD600">x</span> ${jogo.resultadoTime2}</span>
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;">${jogo.nomeTime2}</span>
+          <img src="${jogo.logoTime2}" alt="Logo B" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+        </div>
+      `;
+    });
+    jogosVolta.forEach(jogo => {
+      listaVolta.innerHTML += `
+        <div class="jogo-item" style="margin-bottom:16px;display:flex;align-items:center;gap:18px;background:#fff;border-radius:10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+          <img src="${jogo.logoTime1}" alt="Logo A" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;">${jogo.nomeTime1}</span>
+          <span style="font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;">${jogo.resultadoTime1} <span style="color:#FFD600">x</span> ${jogo.resultadoTime2}</span>
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;">${jogo.nomeTime2}</span>
+          <img src="${jogo.logoTime2}" alt="Logo B" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+        </div>
+      `;
+    });
+  });
+  // Final
+  db.collection('paulista-sub20-serieb').doc('final').get().then(doc => {
+    if (!doc.exists) return;
+    const dados = doc.data();
+    const jogosIda = dados.jogosIda || [];
+    const jogosVolta = dados.jogosVolta || [];
+    const listaIda = document.querySelector('.lista-jogos-ida.final');
+    const listaVolta = document.querySelector('.lista-jogos-volta.final');
+    listaIda.innerHTML = '';
+    listaVolta.innerHTML = '';
+    jogosIda.forEach(jogo => {
+      listaIda.innerHTML += `
+        <div class="jogo-item" style="margin-bottom:16px;display:flex;align-items:center;gap:18px;background:#fff;border-radius:10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+          <img src="${jogo.logoTime1}" alt="Logo A" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;">${jogo.nomeTime1}</span>
+          <span style="font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;">${jogo.resultadoTime1} <span style="color:#FFD600">x</span> ${jogo.resultadoTime2}</span>
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;">${jogo.nomeTime2}</span>
+          <img src="${jogo.logoTime2}" alt="Logo B" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+        </div>
+      `;
+    });
+    jogosVolta.forEach(jogo => {
+      listaVolta.innerHTML += `
+        <div class="jogo-item" style="margin-bottom:16px;display:flex;align-items:center;gap:18px;background:#fff;border-radius:10px;padding:12px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+          <img src="${jogo.logoTime1}" alt="Logo A" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:right;">${jogo.nomeTime1}</span>
+          <span style="font-weight:900;font-size:1.2rem;color:#1a237e;padding:0 10px;">${jogo.resultadoTime1} <span style="color:#FFD600">x</span> ${jogo.resultadoTime2}</span>
+          <span class="nome-clube" style="font-weight:700;font-size:1.1rem;color:#222;min-width:90px;text-align:left;">${jogo.nomeTime2}</span>
+          <img src="${jogo.logoTime2}" alt="Logo B" style="height:36px;width:36px;object-fit:contain;border-radius:6px;background:#eee;">
+        </div>
+      `;
+    });
+  });
+}
+
+			</script>
+
+<!-- Padroniza largura dos blocos de classificação e jogos para todos os grupos -->
+<style>
+  /* Responsividade geral */
+  body, html {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+header, footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.grupos-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.grupo-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+  .grupo-row {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .grupo-bloco, .jogos-bloco {
+    max-width: 560px;
+    width: 100%;
+    min-width: unset;
+    box-sizing: border-box;
+  }
+  @media (max-width: 1094px) {
+    main {
+      max-width: 100%;
+      padding: 0 8px;
+    }
+    .grupo-row, .grupos-container > div {
+      flex-direction: column !important;
+      gap: 16px !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+  }
+  @media (max-width: 692px) {
+    .jogo-item span.nome-clube {
+      display: none !important;
+    }
+    main {
+      padding: 0 4px;
+    }
+  }
+  @media (max-width: 600px) {
+    main {
+      padding: 8px !important;
+    }
+    .grupo-row, .grupos-container > div {
+      flex-direction: column !important;
+      gap: 8px !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    .grupo-bloco, .jogos-bloco {
+      max-width: 100% !important;
+      width: 100% !important;
+      padding: 12px 6px !important;
+    }
+    .jogo-item {
+      font-size: 0.95rem !important;
+      padding: 8px 4px !important;
+    }
+    .tabela-times th, .tabela-times td {
+      font-size: 0.9rem !important;
+      padding: 4px !important;
+    }
+    #titulo-rodada, [id^="titulo-rodada-grupo"] {
+      font-size: 1rem !important;
+    }
+  }
+
+  .fase-ativa {
+  background: #000000 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(26,35,126,0.08);
+}
+#menu-fases button {
+  transition: background 0.2s, color 0.2s;
+}
+.jogo-item {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+.jogo-item span,
+.jogo-item img {
+  white-space: nowrap;
+}
+.jogo-item span[style*='x'] {
+  min-width: 70px;
+  text-align: center;
+  display: inline-block;
+}
+@media (max-width: 600px) {
+  .jogo-item {
+    gap: 10px;
+  }
+}
+</style>
+</body>
+</html>
