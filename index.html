@@ -3,101 +3,286 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aguardem | Seu Placar Esportes</title>
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/9zfRszqM/SEU-PLACAR-ESPORTIVO-Logo.png">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #FFD600 0%, #111 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-      color: #222;
-    }
-    .logo-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 32px;
-    }
-    .logo-area img {
-      height: 120px;
-      width: auto;
-      border-radius: 18px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-      background: #111;
-      margin-bottom: 18px;
-    }
-    .aguardem-box {
-      background: #111;
-      border-radius: 18px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.10);
-      padding: 32px 24px;
-      max-width: 400px;
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .aguardem-box h1 {
-      font-size: 2.2em;
-      color: #FFD600;
-      margin-bottom: 18px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-    .aguardem-box p {
-      font-size: 1.2em;
-      color: #fff;
-      margin-bottom: 0;
-      font-weight: 500;
-    }
-    .footer {
-      margin-top: 32px;
-      color: #FFD600;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      opacity: 0.8;
-    }
-    @media (max-width: 600px) {
-      .logo-area img {
-        height: 70px;
-      }
-      .aguardem-box {
-        padding: 18px 8px;
-        max-width: 98vw;
-      }
-      .aguardem-box h1 {
-        font-size: 1.3em;
-      }
-      .aguardem-box p {
-        font-size: 1em;
-      }
-    }
-  </style>
+  <title>Seu Placar Esportes</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;700;900&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <link rel="icon" type="image/png" href="img/SEU PLACAR ESPORTIVO - Logo.png">
 </head>
 <body>
-  <div class="logo-area">
-    <img src="https://i.postimg.cc/Y0zYJJnX/LOGO-2.png" alt="Logo Seu Placar Esportes">
-  </div>
-  <div class="aguardem-box">
-    <h1>Em breve: Seu Placar Esportes</h1>
-    <p>Estamos preparando uma experiência incrível para os apaixonados pelo esporte de Rio Preto e região.<br><br>
-    Aguarde! Em breve você terá acesso a uma página moderna, dinâmica e cheia de novidades sobre o esporte local.<br><br>
-    Fique ligado!</p>
-    <div style="margin-top:24px;text-align:center;">
-      <span style="color:#FFD600;font-weight:bold;font-size:1.1em;">Siga nosso instagram</span><br>
-      <span style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="height:22px;width:22px;filter:invert(80%) sepia(100%) saturate(500%) hue-rotate(320deg);">
-        <span style="color:#fff;font-size:1.1em;">@seuplacarbr</span>
-      </span>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <img src="img/Logo 2.png" alt="Seu Placar" class="logo-img">
+      </div>
+      <nav class="menu">
+        <a href="index.html" class="menu-link">Home</a>
+        <div class="menu-campeonatos">
+          <a href="#" class="menu-link">Campeonatos</a>
+          <ul class="submenu-campeonatos">
+            <li>
+              <a href="#">Paulista</a>
+              <ul class="submenu-paulista">
+                <li><a href="Campeonatos/Paulista-Sub20-Serie-b.html">Paulista Sub-20 - Serie B</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <a href="noticias.html" class="menu-link">Notícias</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Abrir menu">
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+        <span class="hamburger"></span>
+      </button>
     </div>
+  </header>
+  <div class="faixa-resultados" id="faixa-resultados">
+    <!-- Resultados dinâmicos serão carregados aqui via jQuery/Firebase -->
   </div>
-  <div class="footer">
-    © MR Tecnologia - Seu Placar Esportes
+  <div class="publicidade1" id="publicidade1">
+    <!-- Imagem de publicidade será carregada via Firebase -->
   </div>
+  <section class="destaques">
+    <h2 class="destaques-titulo">Destaques</h2>
+    <div class="destaques-abas">
+      <button class="destaques-aba selecionada">Título do Destaque 1</button>
+      <button class="destaques-aba">Título do Destaque 2</button>
+      <button class="destaques-aba">Título do Destaque 3</button>
+      <button class="destaques-aba">Título do Destaque 4</button>
+      <button class="destaques-aba">Título do Destaque 5</button>
+    </div>
+    <div class="destaques-retangulo">
+      <img src="img/destaque-exemplo.jpg" alt="Destaque" class="destaques-img">
+      <div class="destaques-info">
+        <p class="destaques-descricao">Descrição do destaque aparece aqui. Em breve será dinâmico via Firebase.</p>
+      </div>
+    </div>
+  </section>
+  <section class="bloco-campeonatos">
+    <div class="campeonatos-iframe-container">
+      <!-- Iframe será inserido via JS -->
+    </div>
+  </section>
+  <div class="publicidade2" id="publicidade2">
+    <!-- Imagem de publicidade2 será carregada via Firebase -->
+  </div>
+  <footer class="rodape">
+    <div class="rodape-content">
+      <img src="img/Logo 2.png" alt="Seu Placar" class="rodape-logo">
+      <div class="rodape-info">
+        <p>Criado por MR Tecnologia</p>
+        <p>Siga nossa página no Instagram</p>
+        <div class="rodape-instagram-bloco">
+          <a href="https://instagram.com/seuplacaresportes" target="_blank" class="rodape-instagram">
+            <img src="img/Instagram.png" alt="Instagram" class="rodape-instagram-logo">
+            @seuplacaresportes
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script>
+var firebaseConfig = {
+  apiKey: "AIzaSyDOpvSQ7suA89IVhD34u5Iw5sNCMcJnnUQ",
+  authDomain: "destaques-seuplacar.firebaseapp.com",
+  projectId: "destaques-seuplacar",
+  storageBucket: "destaques-seuplacar.appspot.com",
+  messagingSenderId: "622018085029",
+  appId: "1:622018085029:web:0976b1b6fa84b66a1d4d4c",
+  measurementId: "G-KNF2JVHLJ2"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
+
+function renderResultadosFaixa(eventoId) {
+  db.collection('eventos').doc(eventoId).get().then(function(doc) {
+    if (!doc.exists) return;
+    var evento = doc.data();
+    var html = `<img src='${evento.campeonatoLogo}' class='logo-competicao' alt='Competição'>`;
+    // Linha vertical entre logo da competição e primeiro jogo
+    html += `<span class='linha-vertical'></span>`;
+    db.collection('eventos').doc(eventoId).collection('jogos').get().then(function(querySnapshot) {
+      var first = true;
+      querySnapshot.forEach(function(jogoDoc) {
+        var jogo = jogoDoc.data();
+        if (!first) html += `<span class='linha-vertical'></span>`;
+        first = false;
+        html += `<span class='resultado-item'>
+          <img src='${jogo.logoTime1}' class='resultado-logo' alt='${jogo.nomeTime1 || ''}'>
+          <span class='resultado-placar'>${jogo.resultadoTime1}</span>
+          <span class='resultado-placar'>:</span>
+          <span class='resultado-placar'>${jogo.resultadoTime2}</span>
+          <img src='${jogo.logoTime2}' class='resultado-logo' alt='${jogo.nomeTime2 || ''}'>
+        </span>`;
+      });
+      $('#faixa-resultados').html(html);
+    });
+  });
+}
+
+var eventosIds = [];
+var eventoAtual = 0;
+
+function mostrarEventoAtual() {
+  if (eventosIds.length === 0) return;
+  renderResultadosFaixa(eventosIds[eventoAtual]);
+}
+
+function proximoEvento() {
+  eventoAtual = (eventoAtual + 1) % eventosIds.length;
+  mostrarEventoAtual();
+}
+
+function carregarPublicidade1() {
+  db.collection('patrocinadores').doc('publicidades').get().then(function(doc) {
+    if (!doc.exists) return;
+    var dados = doc.data();
+    var imgUrl = (dados.publicidades && dados.publicidades[0]) ? dados.publicidades[0] : '';
+    var html = `<img src='${imgUrl}' class='publicidade1-img' alt='Publicidade'>`;
+    $('#publicidade1').html(html);
+  });
+}
+
+function carregarPublicidade2() {
+  db.collection('patrocinadores').doc('publicidades').get().then(function(doc) {
+    if (!doc.exists) return;
+    var dados = doc.data();
+    var imgUrl = (dados.publicidades && dados.publicidades[1]) ? dados.publicidades[1] : '';
+    var html = `<img src='${imgUrl}' class='publicidade2-img' alt='Publicidade2'>`;
+    $('#publicidade2').html(html);
+  });
+}
+
+var destaques = [];
+var destaqueAtual = 0;
+var destaquesInterval;
+
+function renderDestaques() {
+  // Render abas
+  var abasHtml = '';
+  for (var i = 0; i < destaques.length; i++) {
+    var d = destaques[i];
+    abasHtml += `<button class="destaques-aba${i === destaqueAtual ? ' selecionada' : ''}" data-ordem="${d.ordem}">${d.titulo}</button>`;
+  }
+  $('.destaques-abas').html(abasHtml);
+
+  // Render conteúdo do retângulo
+  if (destaques[destaqueAtual]) {
+    var d = destaques[destaqueAtual];
+    var retHtml = `<div style="position:relative;height:100%;display:flex;align-items:center;">
+      <img src="${d.imagem}" alt="Destaque" class="destaques-img" style="max-width:48%;height:auto;flex-shrink:0;">
+      <div class="destaques-info" style="flex:1;padding-left:32px;position:relative;display:flex;flex-direction:column;justify-content:space-between;height:100%;">
+        <div style="width:100%;">
+          <p class="destaques-descricao" style="margin-bottom:0;">${d.descricao}</p>
+        </div>
+        <div class="destaques-veja-mais" style="width:100%;text-align:right;">
+          <a href="${d.link}" target="_blank" style="color:#222;text-decoration:underline;font-size:0.95em;font-weight:bold;">Veja mais em ${d.fonte||''}</a>
+        </div>
+      </div>
+    </div>`;
+    $('.destaques-retangulo').html(retHtml);
+  }
+
+  // Troca de destaque ao clicar na aba
+  $('.destaques-aba').on('click', function() {
+    var idx = $(this).index();
+    destaqueAtual = idx;
+    renderDestaques();
+    reiniciarDestaquesInterval();
+  });
+}
+
+function proximoDestaque() {
+  if (destaques.length === 0) return;
+  destaqueAtual = (destaqueAtual + 1) % destaques.length;
+  renderDestaques();
+}
+
+function reiniciarDestaquesInterval() {
+  clearInterval(destaquesInterval);
+  destaquesInterval = setInterval(proximoDestaque, 6000);
+}
+
+function carregarDestaques() {
+  db.collection('destaques').orderBy('ordem').limit(5).get().then(function(querySnapshot) {
+    destaques = [];
+    querySnapshot.forEach(function(doc) {
+      var d = doc.data();
+      destaques.push({
+        titulo: d.titulo || '',
+        imagem: d.imagem || '',
+        descricao: d.descricao || '',
+        ordem: d.ordem || 0,
+        fonte: d.fonte || '',
+        link: d.link || ''
+      });
+    });
+    destaqueAtual = 0;
+    renderDestaques();
+    reiniciarDestaquesInterval();
+  });
+}
+
+var campeonatosArquivos = [
+  "Torneios Principal/paulista-sub-17-28.html",
+  "Torneios Principal/paulista-sub-17-30.html",
+  "Torneios Principal/paulista-sub-17-31.html",
+  "Torneios Principal/paulista-sub-17-32.html",
+  "Torneios Principal/paulista-sub-17-33.html"
+];
+var campeonatoAtual = 0;
+var campeonatosInterval;
+
+function renderCampeonato() {
+  var src = campeonatosArquivos[campeonatoAtual];
+  $('.campeonatos-iframe-container').fadeOut(600, function() {
+    var html = `<iframe src='${src}' class='campeonatos-iframe' frameborder='0' allowfullscreen style='width: 100%; max-width: 1600px; min-height: 450px;'></iframe>`;
+    $('.campeonatos-iframe-container').html(html).fadeIn(600);
+  });
+}
+
+function proximoCampeonato() {
+  campeonatoAtual = (campeonatoAtual + 1) % campeonatosArquivos.length;
+  renderCampeonato();
+}
+
+function iniciarCampeonatosInterval() {
+  clearInterval(campeonatosInterval);
+  campeonatosInterval = setInterval(proximoCampeonato, 7000);
+}
+
+$(function() {
+  // Menu hambúrguer responsivo
+  $('.menu-toggle').on('click', function() {
+    $('.menu').toggleClass('menu-aberto');
+  });
+
+  // Carregar todos os eventos
+  db.collection('eventos').get().then(function(querySnapshot) {
+    eventosIds = querySnapshot.docs.map(function(doc) { return doc.id; });
+    eventoAtual = 0;
+    mostrarEventoAtual();
+    if (eventosIds.length > 1) {
+      setInterval(function() {
+        // Transição fade mais lenta
+        $('#faixa-resultados').fadeOut(700, function() {
+          proximoEvento();
+          $('#faixa-resultados').fadeIn(700);
+        });
+      }, 7000);
+    }
+  });
+
+  carregarPublicidade1();
+  carregarPublicidade2();
+  carregarDestaques();
+  renderCampeonato();
+  iniciarCampeonatosInterval();
+});
+  </script>
+  <!-- Próximo bloco: faixa de resultados -->
 </body>
 </html>
