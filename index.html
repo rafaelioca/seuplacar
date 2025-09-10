@@ -1,90 +1,91 @@
 <!DOCTYPE html>
+
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seu Placar Esportes</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;700;900&display=swap" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/qBssh3J8/SEU-PLACAR-ESPORTIVO-Logo.png">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Seu Placar Esportes</title>
+<link href="style.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<link href="https://i.postimg.cc/qBssh3J8/SEU-PLACAR-ESPORTIVO-Logo.png" rel="icon" type="image/png"/>
 </head>
 <body>
-  <header class="header">
-    <div class="header-content">
-      <div class="logo">
-        <img src="https://i.postimg.cc/Y0zYJJnX/LOGO-2.png" alt="Seu Placar" class="logo-img">
-      </div>
-      <nav class="menu">
-        <a href="index.html" class="menu-link">Home</a>
-        <div class="menu-campeonatos">
-          <a href="#" class="menu-link">Campeonatos</a>
-          <ul class="submenu-campeonatos">
-            <li>
-              <a href="#">Paulista</a>
-              <ul class="submenu-paulista">
-                <li><a href="Campeonatos/Paulista-Sub20-Serie-b.html">Paulista Sub-20 - Serie B</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <a href="noticias.html" class="menu-link">Notícias</a>
-      </nav>
-      <button class="menu-toggle" aria-label="Abrir menu">
-        <span class="hamburger"></span>
-        <span class="hamburger"></span>
-        <span class="hamburger"></span>
-      </button>
-    </div>
-  </header>
-  <div class="faixa-resultados" id="faixa-resultados">
-    <!-- Resultados dinâmicos serão carregados aqui via jQuery/Firebase -->
-  </div>
-  <div class="publicidade1" id="publicidade1">
-    <!-- Imagem de publicidade será carregada via Firebase -->
-  </div>
-  <section class="destaques">
-    <h2 class="destaques-titulo">Destaques</h2>
-    <div class="destaques-abas">
-      <button class="destaques-aba selecionada">Título do Destaque 1</button>
-      <button class="destaques-aba">Título do Destaque 2</button>
-      <button class="destaques-aba">Título do Destaque 3</button>
-      <button class="destaques-aba">Título do Destaque 4</button>
-      <button class="destaques-aba">Título do Destaque 5</button>
-    </div>
-    <div class="destaques-retangulo">
-      <img src="img/destaque-exemplo.jpg" alt="Destaque" class="destaques-img">
-      <div class="destaques-info">
-        <p class="destaques-descricao">Descrição do destaque aparece aqui. Em breve será dinâmico via Firebase.</p>
-      </div>
-    </div>
-  </section>
-  <section class="bloco-campeonatos">
-    <div class="campeonatos-iframe-container">
-      <!-- Iframe será inserido via JS -->
-    </div>
-  </section>
-  <div class="publicidade2" id="publicidade2">
-    <!-- Imagem de publicidade2 será carregada via Firebase -->
-  </div>
-  <footer class="rodape">
-    <div class="rodape-content">
-      <img src="https://i.postimg.cc/Y0zYJJnX/LOGO-2.png" alt="Seu Placar" class="rodape-logo">
-      <div class="rodape-info">
-        <p>Criado por MR Tecnologia</p>
-        <p>Siga nossa página no Instagram</p>
-        <div class="rodape-instagram-bloco">
-          <a href="https://instagram.com/seuplacaresportes" target="_blank" class="rodape-instagram">
-            <img src="img/Instagram.png" alt="Instagram" class="rodape-instagram-logo">
+<header class="header">
+<div class="header-content">
+<div class="logo">
+<img alt="Seu Placar" class="logo-img" src="https://i.postimg.cc/Y0zYJJnX/LOGO-2.png"/>
+</div>
+<nav class="menu">
+<a class="menu-link" href="index.html">Home</a>
+<div class="menu-campeonatos">
+<a class="menu-link" href="#">Campeonatos</a>
+<ul class="submenu-campeonatos">
+<li>
+<a href="#">Paulista</a>
+<ul class="submenu-paulista">
+<li><a href="Campeonatos/Paulista-Sub20-Serie-b.html">Paulista Sub-20 - Serie B</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<a class="menu-link" href="noticias.html">Notícias</a>
+</nav>
+<button aria-label="Abrir menu" class="menu-toggle">
+<span class="hamburger"></span>
+<span class="hamburger"></span>
+<span class="hamburger"></span>
+</button>
+</div>
+</header>
+<div class="faixa-resultados" id="faixa-resultados">
+<!-- Resultados dinâmicos serão carregados aqui via jQuery/Firebase -->
+</div>
+<div class="publicidade1" id="publicidade1">
+<!-- Imagem de publicidade será carregada via Firebase -->
+</div>
+<section class="destaques">
+<h2 class="destaques-titulo">Destaques</h2>
+<div class="destaques-abas">
+<button class="destaques-aba selecionada">Título do Destaque 1</button>
+<button class="destaques-aba">Título do Destaque 2</button>
+<button class="destaques-aba">Título do Destaque 3</button>
+<button class="destaques-aba">Título do Destaque 4</button>
+<button class="destaques-aba">Título do Destaque 5</button>
+</div>
+<div class="destaques-retangulo">
+<img alt="Destaque" class="destaques-img" src="img/destaque-exemplo.jpg"/>
+<div class="destaques-info">
+<p class="destaques-descricao">Descrição do destaque aparece aqui. Em breve será dinâmico via Firebase.</p>
+</div>
+</div>
+</section>
+<section class="bloco-campeonatos">
+<div class="campeonatos-iframe-container">
+<!-- Iframe será inserido via JS -->
+</div>
+</section>
+<div class="publicidade2" id="publicidade2">
+<!-- Imagem de publicidade2 será carregada via Firebase -->
+</div>
+<footer class="rodape">
+<div class="rodape-content">
+<img alt="Seu Placar" class="rodape-logo" src="https://i.postimg.cc/Y0zYJJnX/LOGO-2.png"/>
+<div class="rodape-info">
+<p>Criado por MR Tecnologia</p>
+<p>Siga nossa página no Instagram</p>
+<div class="rodape-instagram-bloco">
+<a class="rodape-instagram" href="https://instagram.com/seuplacaresportes" target="_blank">
+<img alt="Instagram" class="rodape-instagram-logo" src="img/Instagram.png"/>
             @seuplacaresportes
           </a>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <script>
+</div>
+</div>
+</div>
+</footer>
+<script>
 var firebaseConfig = {
   apiKey: "AIzaSyDOpvSQ7suA89IVhD34u5Iw5sNCMcJnnUQ",
   authDomain: "destaques-seuplacar.firebaseapp.com",
@@ -172,9 +173,9 @@ function renderDestaques() {
   // Render conteúdo do retângulo
   if (destaques[destaqueAtual]) {
     var d = destaques[destaqueAtual];
-    var retHtml = `<div style="position:relative;height:100%;display:flex;align-items:center;">
-      <img src="${d.imagem}" alt="Destaque" class="destaques-img" style="max-width:48%;height:auto;flex-shrink:0;">
-      <div class="destaques-info" style="flex:1;padding-left:32px;position:relative;display:flex;flex-direction:column;justify-content:space-between;height:100%;">
+    var retHtml = `
+  <img src="${d.imagem}" alt="Destaque" class="destaques-img">
+  <div class="destaques-info">
         <div style="width:100%;">
           <p class="destaques-descricao" style="margin-bottom:0;">${d.descricao}</p>
         </div>
@@ -283,6 +284,6 @@ $(function() {
   iniciarCampeonatosInterval();
 });
   </script>
-  <!-- Próximo bloco: faixa de resultados -->
+<!-- Próximo bloco: faixa de resultados -->
 </body>
 </html>
